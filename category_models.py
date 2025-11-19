@@ -66,10 +66,16 @@ class CategoryModel:
         result = self.collection.delete_one({"type": type, "name": category_name})
         return result
 
-    def get_category_by_test(self, type: str):
+    def get_category_by_type(self, type: str):
         result = self.collection.find({"type": type})
+        result = list(result)
+        return result
+    
+    def get_total(self):
+        result = self.collection.find({})
+        result = list(result)
         return result
 
-if __name__ == "__main__":
-    print("Init cate collection")
-    cate = CategoryModel()
+# if __name__ == "__main__":
+#     print("Init cate collection")
+#     cate = CategoryModel()

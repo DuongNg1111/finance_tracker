@@ -3,6 +3,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+APP_NAME = "FINANCE-TRACKER"
+
 # mongo configuration
 MONGO_URI = os.getenv("MONGO_URI", "localhost:2017")
 DATABASE_NAME = "finance_tracker"
