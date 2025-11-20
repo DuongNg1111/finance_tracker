@@ -42,25 +42,17 @@ class CategoryModel:
             )
 
     def add_category(self, type: str, category_name: str):
-
         item_add = {
             "type": type,
             "name": category_name,
+            "created_at": datetime.now()
         }
-
-
-        item_existing = self.collection.find_one({"type": type, "name": category_name})
-        if item_existing:
-            item_add['last_modified'] = datetime.now()
-        else:
-            item_add['created_at'] = datetime.now()
-            item_add['last_modified'] = datetime.now()
-
-        self.collection.update_one(
-            {"name": cate, "type": "Expense"},
-            {"$setOnInsert": item_add},
-            upsert=True
-        )
+        try:
+            result = self.collection.insert_one(item_add)
+            return result.inserted_id
+        except Exception as e:
+            print(f"Error {e}")
+            return None
 
     def delete_category(self, type: str, category_name: str):
         result = self.collection.delete_one({"type": type, "name": category_name})
@@ -79,3 +71,10 @@ class CategoryModel:
 # if __name__ == "__main__":
 #     print("Init cate collection")
 #     cate = CategoryModel()
+
+#     item = {
+#         "type": "Expense",
+#         "name": "Rent"
+#     }
+
+#     result = cate.add_category(type = "Expense", category_name="Rent")
