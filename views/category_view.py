@@ -4,7 +4,7 @@ import config
 # function to render category list
 def _render_category_list(category_model, category_type: str):
     st.subheader(f"{category_type} Categories")
-    expense_lst = category_model.get_category_by_type(category_type = category_type)
+    expense_lst = category_model.get_categories_by_type(category_type = category_type)
 
     if expense_lst:
         st.write(f"Total: {len(expense_lst)} categories")
