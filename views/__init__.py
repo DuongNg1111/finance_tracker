@@ -1,7 +1,9 @@
 from .category_view import render_categories
 from .transaction_view import render_transactions
+from .user_view import render_user_profile
 
 __all__ = [
     "render_categories",
-    "render_transactions"
+    "render_transactions",
+    "render_user_profile"
 ]

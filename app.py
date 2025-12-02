@@ -11,7 +11,8 @@ from database import (
 # import view module
 from views import (
     render_categories,
-    render_transactions
+    render_transactions,
+    render_user_profile
 )
 
 # initialize models
@@ -60,21 +61,19 @@ else:
         st.error(f"Error during user login: {e}")
         st.stop()
 
-    st.write(f"Welcome {st.user.email}")
-    st.caption(f"User id in mongo db: {mongo_user_id}")
-    st.button("Logout", on_click = st.logout)
-    if st.button("Deactivate"):
-        try:
-            user_model.deactivate(mongo_user_id)
-            st.rerun()
-        except Exception as e:
-            st.error(f"Error during deactivate: {e}")
-
     # set user_id for models
     # currently we have category and transaction models
     # you can optimize this by doing it in the model init function
     models['category'].set_user_id(mongo_user_id)
     models['transaction'].set_user_id(mongo_user_id)
+
+    user = st.user.to_dict()
+    user.update({
+        "id": mongo_user_id
+    })
+
+    render_user_profile(user_model, user)
+
 
     # =============================================
     # 2. Navigation
