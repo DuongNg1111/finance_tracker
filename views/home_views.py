@@ -27,7 +27,7 @@ def render_dashboard(analyzer_model: FinanceAnalyzer,
     
     date_ranges = get_date_range_options() #> return dictionary
     start_date, end_date = date_ranges[date_range_option]
-    
+
     # Display metrics section
     _render_metrics(analyzer_model, start_date, end_date)
     

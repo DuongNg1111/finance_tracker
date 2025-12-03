@@ -25,8 +25,6 @@ class TransactionModel:
 
         # Build query filter
         query = self._build_query(advanced_filters)
-
-        print("TransactionModel.get_transactions - query:", query)
               
         # Fetch transactions, sort from newest to oldest
         cursor = self.collection.find(query).sort("created_at", -1)
@@ -67,7 +65,7 @@ class TransactionModel:
                 date_query["$gte"] = handler_datetime(start_date) # $gte = greater than or equal
             if end_date is not None:
                 date_query["$lte"] = handler_datetime(end_date) # $lte = less than or equal
-            conditions.append({"created_at": date_query})
+            conditions.append({"date": date_query})
 
         # Check description:
         if "search_text" in advanced_filter:

@@ -23,7 +23,7 @@ def _render_transaction_card(model: TransactionModel, item: dict):
     # Format the header
     transaction_type = item.get('type', 'Unknown')
     amount = item.get('amount', 0)
-    date = item.get('transaction_date', datetime.now())
+    date = item.get('date', datetime.now())
     category = item.get('category', 'Others')
     
     # Color coding

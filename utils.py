@@ -8,14 +8,15 @@ def format_currency(amount):
 
 def get_date_range_options():
     """Get predefined date range options"""
-    today = datetime.now().date()
+    now = datetime.now()
+    today = now.date()
     
     return {
-        "Today": (today, today),
-        "Yesterday": (today - timedelta(days=1), today - timedelta(days=1)),
-        "Last 7 Days": (today - timedelta(days=7), today),
-        "Last 30 Days": (today - timedelta(days=30), today),
-        "This Month": (today.replace(day=1), today),
+        "Today": (today, now),
+        "Yesterday": (today - timedelta(days=1), now),
+        "Last 7 Days": (today - timedelta(days=7), now),
+        "Last 30 Days": (today - timedelta(days=30), now),
+        "This Month": (today.replace(day=1), now),
         "Last Month": get_last_month_range(),
         "Last 3 Months": (today - timedelta(days=90), today),
         "Last 6 Months": (today - timedelta(days=180), today),
