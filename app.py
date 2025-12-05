@@ -10,7 +10,7 @@ from database import (
 
 # import analytics
 from analytics.analyzer import FinanceAnalyzer
-# from analytics.visualizer import FinanceVisualizer
+from analytics.visualizer import FinanceVisualizer
 
 # import view module
 from views import (
@@ -28,6 +28,7 @@ def init_models():
         "category": CategoryModel(),
         "transaction": TransactionModel(),
         "user": UserModel(),
+        "visualizer": FinanceVisualizer()
     }
 
 # initialize session per user
@@ -100,7 +101,8 @@ else:
     if page == "Home":
         st.title("Home")
         render_dashboard(analyzer_model=analyzer_model, 
-                        transaction_model=models['transaction'])
+                        transaction_model=models['transaction'],
+                        visualizer_model=models["visualizer"])
 
     elif page == "Category":
         # get category_model from models

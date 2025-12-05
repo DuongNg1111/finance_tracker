@@ -56,7 +56,7 @@ class FinanceAnalyzer:
         
         return category_spending
     
-    def get_monthly_trend(self, user_id="default_user", months=6):
+    def get_monthly_trend(self, months=6):
         """Get monthly spending and income trend"""
         end_date = datetime.now()
         start_date = end_date - timedelta(days=months*30)

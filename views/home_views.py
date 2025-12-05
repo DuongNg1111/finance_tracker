@@ -3,9 +3,11 @@ import pandas as pd
 from utils import format_currency, get_date_range_options
 from analytics.analyzer import FinanceAnalyzer
 from database import TransactionModel
+from analytics.visualizer import FinanceVisualizer
 
 def render_dashboard(analyzer_model: FinanceAnalyzer, 
-                    transaction_model: TransactionModel):
+                    transaction_model: TransactionModel,
+                    visualizer_model: FinanceVisualizer):
     """
     Render the main financial dashboard
     
@@ -33,8 +35,8 @@ def render_dashboard(analyzer_model: FinanceAnalyzer,
     
     st.divider()
     
-    # # Display charts section
-    # _render_charts(analyzer_model, visualize_model, start_date, end_date)
+    # Display charts section
+    _render_charts(analyzer_model, visualizer_model, start_date, end_date)
     
     # # Display recent transactions
     # _render_recent_transactions(transaction_model)
@@ -72,24 +74,27 @@ def _render_metrics(analyzer_model: FinanceAnalyzer, start_date, end_date):
         st.metric("📅 Daily Avg Expense", format_currency(daily_avg))
 
 
-def _render_charts(analyzer_model, visualizer_model, start_date, end_date):
+def _render_charts(analyzer_model:FinanceAnalyzer, 
+                   visualizer_model:FinanceVisualizer, 
+                   start_date, 
+                   end_date):
     """Render the charts section with category and trend visualizations"""
     # Category charts
     col1, col2 = st.columns(2)
-    
+
     with col1:
         st.subheader("Spending by Category")
         category_spending = analyzer_model.get_spending_by_category(start_date, end_date)
         if not category_spending.empty:
-            fig = visualizer_model.plot_pie_chart(category_spending)
-            st.plotly_chart(fig, width='stretch')
+            fig = visualizer_model.plot_category_spending(category_spending)
+            st.plotly_chart(fig, width='stretch') # embedded plotly chart into streamlit
         else:
             st.info("No expense data available for this period")
     
     with col2:
         st.subheader("Category Breakdown")
         if not category_spending.empty:
-            fig = visualizer_model.plot_category_spending(category_spending)
+            fig = visualizer_model.plot_pie_chart(category_spending)
             st.plotly_chart(fig, width='stretch')
         else:
             st.info("No expense data available for this period")
@@ -104,19 +109,19 @@ def _render_charts(analyzer_model, visualizer_model, start_date, end_date):
         st.info("No data available for monthly trend")
 
 
-def _render_recent_transactions(transaction_model):
-    """Render the recent transactions table"""
-    st.subheader("Recent Transactions")
-    recent = transaction_model.get_transactions()
+# # def _render_recent_transactions(transaction_model):
+#     """Render the recent transactions table"""
+#     st.subheader("Recent Transactions")
+#     recent = transaction_model.get_transactions()
     
-    if recent:
-        df_recent = pd.DataFrame(recent)
-        df_recent['date'] = pd.to_datetime(df_recent['date'].head()).dt.date
-        df_recent['amount'] = df_recent['amount'].apply(format_currency)
-        st.dataframe(
-            df_recent[['date', 'type', 'category', 'amount', 'description']],
-            width='stretch',
-            hide_index=True
-        )
-    else:
-        st.info("No transactions yet")
+#     if recent:
+#         df_recent = pd.DataFrame(recent)
+#         df_recent['date'] = pd.to_datetime(df_recent['date'].head()).dt.date
+#         df_recent['amount'] = df_recent['amount'].apply(format_currency)
+#         st.dataframe(
+#             df_recent[['date', 'type', 'category', 'amount', 'description']],
+#             width='stretch',
+#             hide_index=True
+#         )
+#     else:
+#         st.info("No transactions yet")

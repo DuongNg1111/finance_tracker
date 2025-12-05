@@ -1,4 +1,4 @@
-from pymongo import MongoClient
+from pymongo import MongoClient, DESCENDING
 import config
 
 class DatabaseManager:
@@ -14,11 +14,22 @@ class DatabaseManager:
         self.client = MongoClient(config.MONGO_URI)
         self.db = self.client[config.DATABASE_NAME]
         try:
+            # test connection
             self.db.command("ping")
+
+            # create or update index
+            self._create_index()
             print("Initialize DB success")
         except Exception as e:
             print(f"Error in connect: {e}")
             raise e
+        
+    def _create_index(self):
+        "Create indexes for better performance"
+        self.db.transactions.create_index([("user_id", DESCENDING), ("date", DESCENDING)])
+        self.db.categories.create_index([("user_id", DESCENDING),
+                                           ("type", DESCENDING),
+                                           ("name", DESCENDING)], unique = True)
         
     def get_collection(self, collection_name: str):
         """Get a collection from db"""
