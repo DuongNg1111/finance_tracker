@@ -1,4 +1,8 @@
 from pymongo import MongoClient, DESCENDING
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import config
 
 class DatabaseManager:
@@ -11,7 +15,7 @@ class DatabaseManager:
         return cls._instance
         
     def _initialize(self):
-        self.client = MongoClient(config.MONGO_URI)
+        self.client = MongoClient(config.MONGO_URI_FINAL)
         self.db = self.client[config.DATABASE_NAME]
         try:
             # test connection
